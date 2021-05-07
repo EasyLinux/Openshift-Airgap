@@ -1,0 +1,10 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: cluster-logging
+  namespace: openshift-logging 
+spec:
+  channel: "4.5" 
+  name: cluster-logging
+  source: <catalog name> 
+  sourceNamespace: openshift-marketplace
