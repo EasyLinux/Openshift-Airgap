@@ -324,3 +324,4 @@ fluentd-x5h4v                                   1/1     Running     0          2
 kibana-75b6b87d87-d6kdp                         2/2     Running     0          25h
 ```
 
+Pour plus d'information sur la configuration de la ressource, clicker [ici](https://docs.openshift.com/container-platform/4.5/logging/cluster-logging-deploying.html)
