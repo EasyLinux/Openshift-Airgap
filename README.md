@@ -14,13 +14,13 @@
 
 # Catalogue Openshift
 
-Les catalogues Openshift n'étant pas disponible sur un cluster déconnecté, il est necessaire de construire le catalogue et de télécharger les images sur internet et de les pousser sur un registre local.
+Les catalogues Openshift n'étant pas disponible sur un cluster déconnecté, il est nécessaire de construire le catalogue, de télécharger les images sur internet et de les pousser sur un registre local.
 
 ## Construction du catalogue
 
-Pour construire le catalogue, il est nécessaire de s'assurer que la machine qui exécute la commande a accès à internet et au registre cible. Cette étape ne nécessite pas de connexion à Openshift. (Les pull-secret Openshift peut être utiliser dans cette étape)
+Pour construire le catalogue, il est nécessaire de s'assurer que la machine qui exécute la commande a accès à internet et au registre cible. Cette étape ne nécessite pas de connexion à Openshift. (Les pull-secret Openshift peut être utiliser dans cette étape).
 
-La commande ci-dessous doit être lancé sur l'hôte avec un accès internet:
+La commande ci-dessous doit être lancée sur l'hôte avec un accès internet:
 
 ```shell
 REG_CREDS=$XDG_RUNTIME_DIR/containers/auth.json;
@@ -50,7 +50,8 @@ Uploading ... 244.9kB/s
 
 ## Registre Miroir
 
-La commande `oc adm catalog mirror` permet de télécharger et de pousser les images sur le registre miroir, il est cependant possible de créer seulement un manifeste et de repousser cette étape ultérieurement en utilisant l'option `--manifest-only`.
+La commande `oc adm catalog mirror` permet de télécharger et de pousser les images sur le registre miroir.
+Il est cependant possible de créer seulement un manifeste et de repousser cette étape ultérieurement en utilisant l'option `--manifest-only`.
 
 ```
 oc adm catalog mirror \
@@ -73,13 +74,13 @@ oc patch OperatorHub cluster --type json \
 
 ## Configurer les pull-secret
 
-Si le registre miroir a besoin d'une authentification pour pouvoir télécharger les images, il vous faudra configurer les pulls secrets de manière globale dans le projet openshift-config et mettre à jour le secret pull-secret de la manière suivante:
+Si le registre miroir a besoin d'une authentification pour pouvoir télécharger les images, il faudra configurer les pulls secrets de manière globale dans le projet openshift-config et mettre à jour le secret pull-secret de la manière suivante:
 
 ```shell
 oc extract --to=- secret/pull-secret -n openshift-config | jq -r > pull-secret-jq.txt
 ```
 
-Cette commande extraira le secret dans un fichier appeler `pull-secret-jq.txt` de maniere formatté.<br/>Il faudra encodé le login, mot de passe en base64 sous le format `<login>:<mot_de_passe>` puis ajouter une entrée dans le fichier pull-secret-jq.txt.
+Cette commande extraira le secret dans un fichier appeler `pull-secret-jq.txt` de maniere formatté.<br/>Il faudra encoder le login, mot de passe en base64 sous le format `<login>:<mot_de_passe>` puis ajouter une entrée dans le fichier pull-secret-jq.txt.
 
 Exemple d'entrée:
 
@@ -127,9 +128,9 @@ Pour appliquer le manifeste, il suffit d'utiliser la commande `oc create -f imag
 
 ## Ajouter le catalogue personnalisé
 
-Pour deployer le catalogue Openshift personnalisé, il faut créer une ressource de type `CatalogSource` puis l'appliquer dans le projet `openshift-marketplace` .
+Pour déployer le catalogue Openshift personnalisé, il faut créer une ressource de type `CatalogSource` puis l'appliquer dans le projet `openshift-marketplace` .
 
-Modifier le yaml suivant pour qu'il corresponde au specification:
+Modifier le yaml suivant pour qu'il corresponde aux specifications:
 
 ```yaml
 apiVersion: operators.coreos.com/v1alpha1
@@ -148,9 +149,9 @@ Créer la ressource à l'aide de la commande `oc create -f catalogsource.yaml` e
 
 ## Registre déconnecté/Accès non directe
 
-Dans le cas où l'acces au registre miroir est impossible, il est possible d'utiliser le fichier `mapping.txt` directement pour télécharger les images sur un hôte avec un acces internet puis les pousser directement avec un autre hôte qui à acces au registre miroir à l'aide de la commande `skopeo`.
+Dans le cas où l'accès au registre miroir est impossible, il est possible d'utiliser le fichier `mapping.txt` directement pour télécharger les images sur un hôte avec un acces internet puis les pousser directement avec un autre hôte qui a acces au registre miroir à l'aide de la commande `skopeo`.
 
-Voici un script typique sur la manipulation du fichier mapping.txt pour telecharger toutes ses images localement. Ce script est a utiliser avec un hôte qui à accès à internet.
+Voici un script typique sur la manipulation du fichier mapping.txt pour télécharger toutes ses images localement. Ce script est à utiliser avec un hôte qui a accès à internet.
 
 ```shell
 for image in `sed -re 's/=[a-z0-9:\/.-]*\//=/g' mapping.txt`; do 
@@ -161,7 +162,7 @@ for image in `sed -re 's/=[a-z0-9:\/.-]*\//=/g' mapping.txt`; do
 done
 ```
 
-Une fois le contenu transferer sur l'hote avec un acces sur le registre miroir, il suffit de pousser l'image avec `skopeo`.
+Une fois le contenu transféré sur l'hote avec un accès sur le registre miroir, il suffit de pousser l'image avec `skopeo`.
 
 ```shell
 for image in `ls -1`; do 
@@ -175,7 +176,7 @@ Pour pouvoir installer l'opérateur Cluster Logging sur un cluster déconnecté,
 
 ## Installer ElasticSearch
 
-Créer un projet sous le nom `openshift-operators-redhat` pour l'opérateur ElasticSearch.<br/>La ressource ci-dessous peut être utilisé pour créer le projet avec la commande `oc create -f <nom_du_fichier.yaml> `
+Créer un projet sous le nom `openshift-operators-redhat` pour l'opérateur ElasticSearch.<br/>La ressource ci-dessous peut être utilisée pour créer le projet avec la commande `oc create -f <nom_du_fichier.yaml> `
 
 ```yaml
 apiVersion: v1
@@ -199,7 +200,7 @@ metadata:
 spec: {}
 ```
 
-Faite de même avec la ressource `Subscription`.
+Faire de la même manière avec la ressource `Subscription`.
 
 ```yaml
 apiVersion: operators.coreos.com/v1alpha1
@@ -217,7 +218,7 @@ spec:
 
 ## Installer ClusterLogging
 
-Créer un projet sous le nom `openshift-logging` pour l'opérateur ClusterLogging.<br/>La ressource ci-dessous peut être utilisé pour créer le projet avec la commande `oc create -f <nom_du_fichier.yaml> `
+Créer un projet sous le nom `openshift-logging` pour l'opérateur ClusterLogging.<br/>La ressource ci-dessous peut être utilisée pour créer le projet avec la commande `oc create -f <nom_du_fichier.yaml> `
 
 ```yaml
 apiVersion: v1
@@ -243,7 +244,7 @@ spec:
   - openshift-logging
 ```
 
-Faite de même avec la ressource `Subscription`.
+Faire de la même manière avec la ressource `Subscription`.
 
 ```yaml
 apiVersion: operators.coreos.com/v1alpha1
@@ -260,7 +261,7 @@ spec:
 
 ## Deployer l'instance ClusterLogging
 
-Pour déployer une instance `ClusterLogging`, utiliser la ressource ci-dessous. Cette ressource va solliciter l'opérateur `ClusterLogging`, qui va s'occuper de créer les déploiements et configuration de l'opérateur `ElasticSearch`.
+Pour déployer une instance `ClusterLogging`,il faut utiliser la ressource ci-dessous. Cette ressource va solliciter l'opérateur `ClusterLogging`, qui va s'occuper de créer les déploiements et configuration de l'opérateur `ElasticSearch`.
 
 Pour que l'instance soit persistante, il faudra changer la valeur `storageClassName`, ou supprimer la partie `spec.logsStore.elasticsearch.storage` pour que le stockage soit éphémère.
 
