@@ -112,7 +112,7 @@ Attention, cette étape peut rendre momentanément indisponible le cluster penda
 
 ## Appliquer le manifeste imageContentSourcePolicy
 
-Lors de l'exécution de la commande `oc adm catalg mirror`, un dossier a été créé sur le répertoire courant dans laquelle contient la localisation des images distantes sur le miroir. Si l'option `--manifest-only` a été utilisée lors de l'exécution, et que seul quelques images sont nécessaires, il faudra trier dans le fichier `mapping.txt` les images souhaitées.
+Lors de l'exécution de la commande `oc adm catalog mirror`, un dossier a été créé sur le répertoire courant dans laquelle contient la localisation des images distantes sur le miroir. Si l'option `--manifest-only` a été utilisée lors de l'exécution, et que seul quelques images sont nécessaires, il faudra trier dans le fichier `mapping.txt` les images souhaitées.
 
 La commande ci-dessous fera l'étape de télécharger les images et de les pousser sur le registre miroir en utilisant le fichier `mapping.txt`
 
