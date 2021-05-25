@@ -17,11 +17,10 @@ MCS=api-int.<nom de domaine du cluster>:22623
 jq -cr ".ignition.security.tls.certificateAuthorities[].source |= \"data:text/plain;charset=utf-8;base64,$(openssl s_client -showcerts -connect </dev/null  $MCS 2>/dev/null| openssl x509|base64 --wrap=0)\"" <worker.ign >worker-new.ign
 ```
 
-Si le fichier `worker.ign` a été supprimer post-installation, utiliser ce modèle
+Si le fichier `worker.ign` a été supprimer post-installation, utiliser cette commande pour le generer:
 
-```yaml
-{"ignition":{"config":{"merge":[{"source":"https://api-int.<fqdn-du-cluster-openshift>:22623/config/worker","verification":{}}]},"security":{"tls":{"certificateAuthorities":[{"source":"REPLACE_ME","verification":{}}]}},"timeouts":{},"version":"2.2.0"},"networkd":{},"passwd":{},"storage":{},"systemd":{}}
-
+```shell
+oc extract --to=worker.ign -n openshift-machine-api secret/worker-user-data
 ```
 
 Puis utiliser ce même fichier pour initialiser la machine RHCOS. Lorsque la machine sera initialiser, il sera visible sous la commande `oc get nodes` en état `NotReady`.
