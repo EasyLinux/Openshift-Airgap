@@ -1,12 +1,12 @@
 # Table des matières
 
 1. [Travailler avec les nœuds](#Travailler-avec-les-nœuds)
-     	1. [Ajouter des nœuds `worker`](#Ajouter-des-nœuds-)
-      2. [Supprimer des nœuds `worker`](#Supprimer-des-nœuds-)
+     	1. [Ajouter des nœuds worker](#Ajouter-des-nœuds-worker)
+      2. [Supprimer des nœuds worker](#Supprimer-des-nœuds-worker)
 
 # Travailler avec les nœuds
 
-## Ajouter des nœuds `worker`
+## Ajouter des nœuds worker
 
 Pour ajouter des nouveaux nœuds `worker` sur un cluster existant depuis plus de 24h, il faut utiliser le fichier `worker.ign` créé par `openshift-install` et remplacer le certificat.
 
@@ -33,7 +33,9 @@ S'il existe plusieurs nœuds où le `csr` doit être approuver, utiliser le scri
 oc get csr -o json | jq -r '.items[] | select(.status == {}) | .metadata.name' | xargs -n1 oc adm certificate approve
 ```
 
-## Supprimer des nœuds `worker`
+Pour initialiser un RHCOS, plus d'information peut ếtre trouvé [ici](https://docs.openshift.com/container-platform/4.5/installing/installing_bare_metal/installing-bare-metal.html#installation-user-infra-machines-iso_installing-bare-metal).
+
+## Supprimer des nœuds worker
 
 Pour supprimer des nœuds `worker`, il faut d'abord rendre le noeud non planifiable avec la commande `oc adm cordon <nom du noeud>`, puis s'assurer que la charge du nœuds soit déplacer sur les autres nœuds existant avec la commande `oc adm drain <nom du noeud>`.
 
