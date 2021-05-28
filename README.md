@@ -7,6 +7,7 @@
    5. [Appliquer le manifeste imagecontentsourcepolicy](#Appliquer-le-manifeste-imagecontentsourcepolicy)
    6. [Ajouter le catalogue personnalisé](#Ajouter-le-catalogue-personnalisé)
    7. [Registre déconnecté/Accès non directe](#Registre-déconnecté/Accès-non-directe)
+   8. [Ajouter un operateur dans le catalogue](#Ajouter-un-operateur-dans-le-catalogue)
 2. [Cluster Logging](#Cluster-Logging)
    1. [Installer ElasticSearch](#Installer-ElasticSearch)
    2. [Installer ClusterLogging](#Installer-ClusterLogging)
@@ -169,6 +170,43 @@ for image in `ls -1`; do
 	skopeo copy --all [--authfile ${REG_CREDS}] oci-archive:${image} docker://<registre_miroir>:<port>/<namespace>/${image}
 done
 ```
+
+## Ajouter un operateur dans le catalogue
+
+NOTE: Le developement et le packaging d'un operateur est n'est pas dans le scope de ce chapitre, pour plus d'information sur ces sujets, cliquez [ici](https://olm.operatorframework.io/docs/) et [ici](https://sdk.operatorframework.io/docs/).
+
+Il est possible de gérer le catalogue à l'aide de l'outil `opm` qui peut être téléchargé sur ce  [lien](https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/stable/)(ppc64le)/[lien](https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/)(amd64).
+
+Pour ajouter un manifest d'opérateur dans un catalogue, il suffit d'exécuter la commande suivante:
+
+```shell
+opm index add --bundles <registre>/<image manifeste>:<tag> --tag <registre>/<catalogue>:<tag>
+```
+
+Pour ajouter un manifeste d'opérateur dans un catalogue déjà existant, il faudra utiliser l'option `--from-index` comme ceci:
+
+```shell
+opm index add --bundles <registre>/<image manifeste>:<tag> --from-index <registre>/<catalogue existant>:<tag> --tag <registre>/<catalogue existant>:<nouveau tag>
+```
+
+Il est aussi possible de supprimer des manifestes d'operateur en utilisant la commande `opm index rm`:
+
+```shell
+opm index rm --operators <nom du operateur> --from-index <registre>/<catalogue existant>:<tag> --tag <registre>/<catalogue existant>:<nouveau tag>
+```
+
+Attention: Cette commande supprimera toutes les versions de l'operateur.
+
+Pour consulter les paquets qui existe dans le catalogue, il faudra utiliser l'outils [`grpcurl`](https://github.com/fullstorydev/grpcurl) (l'outils n'existe pas sur les architecture s390x/ppc64le) comme ceci:
+
+```shell
+podman run -p50051:50051 -it <registre>/<catalogue>:<tag>
+grpcurl --plaintext localhost:50051 api.Registry/ListPackages >packages.out
+## ou si le catalogue est dans un cluster Openshift.
+oc get packagemanifest
+```
+
+Attention: Il faut au préalable avoir installé `docker`, `podman` ou `buildah` pour exécuter ces commandes.
 
 # Cluster Logging
 

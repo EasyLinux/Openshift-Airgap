@@ -129,9 +129,9 @@ NOTE: Pour automatiser la synchronisation, il est possible d'utiliser un `cronjo
 
 Par défaut, il existe des rôles déjà existant pour administrer le cluster, ces rôles peuvent être attribuer à l'aide des commandes suivantes: 
 
- - `oc adm policy add-cluster-role-to-user <role> <utilisateur>`  pour un utilisateur
- - `oc adm policy add-cluster-role-to-group <role> <groupe>` pour un group
- - `oc adm policy add-cluster-role-to-user <role> -z <serviceaccount>` pour un `serviceaccount`
+ - `oc adm policy add-cluster-role-to-user <role> <utilisateur>`  pour un utilisateur.
+ - `oc adm policy add-cluster-role-to-group <role> <groupe>` pour un groupe.
+ - `oc adm policy add-cluster-role-to-user <role> -z <serviceaccount> -n <namespace>` pour un `serviceaccount`
 
 Il est aussi possible d'attribuer ces rôles seulement sur un projet avec la commande `oc adm policy add-role-to-* -n <projet> <role><utilisateur>`, cela permet a l'utilisateur de n'avoir que des droits sur le projet.
 
@@ -142,13 +142,21 @@ Voici une liste des rôles existant (non exhaustive) sur Openshift
 | `cluster-admin`    | Un super-utilisateur qui peut effectuer n'importe quelle action dans n'importe quel projet. Lorsqu'il est lié à un utilisateur sur un projet, il a le contrôle total des quotas et de toutes les actions sur toutes les ressources du projet. |
 | `cluster-status`   | Permet de voir le statut du cluster                          |
 | `basic-user`       | Un utilisateur qui peut obtenir des informations de base sur les projets et les utilisateurs. |
-| `admin`            | Un project manager. S'il est utilisé dans une liaison locale, un administrateur a le droit de visualiser toute ressource dans le projet et de modifier toute ressource dans le projet, à l'exception des quotas. |
+| `admin`            | Un project manager, s'il est utilisé dans une liaison locale, un administrateur a le droit de visualiser toute ressource dans le projet et de modifier toute ressource dans le projet, à l'exception des quotas. |
 | `view`             | Un utilisateur qui ne peut effectuer aucune modification, mais qui peut voir la plupart des objets d'un projet. Il ne peut pas voir ou modifier les rôles ou les liens. |
 | `edit`             | Un utilisateur qui peut modifier la plupart des objets d'un projet mais qui n'a pas le pouvoir de visualiser ou de modifier les rôles ou les liens. |
 | `self-provisioner` | Un utilisateur qui peut créer ses propres projets.           |
 
-Attention: Par défaut, un utilisateur authentifié via `oauth` peut créer un projet, il est recommandé que seul un administrateur du cluster puissent créer un projet. Les commandes suivantes permets d'enlevé ce droit:
+Pour pouvoir enlever des utilisateurs d'un `clusterrole`, il est possibles d'utiliser les commandes suivantes:
 
-```shell
-oc adm policy remove-cluster-role-from-group self-provisioner system:authenticated:oauth
-```
+- `oc adm policy remove-cluster-role-from-user <role> <utilisateur>` pour un utilisateur.
+- `oc adm policy remove-cluster-role-from-group <role> <groupe>` pour un groupe.
+- `oc adm policy remove-cluster-role-from-user <role> -z <serviceaccount> -n <namespace>` pour un `serviceaccount`.
+
+La manipulation est similaire pour lié un utilisateur seulement au niveau projet, il suffira d'enlever le mot `cluster` de toutes les commandes comme ceci:
+
+- `oc adm policy add-role-to-user <role> <utilisateur> -n <namespace>`
+- `oc adm policy add-role-to-group <role> <groupe> -n <namespace>`
+- `oc adm policy remove-role-from-user <role> <utilisateur> -n <namespace>`
+- `oc adm policy remove-role-from-group <role> <groupe> -n <namespace>`
+
