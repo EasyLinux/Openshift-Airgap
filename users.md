@@ -85,7 +85,7 @@ Voice un exemple d'entrée pour un annuaire LDAP Active Directory:
         name:
         - name
         preferredUsername:
-        - userPrincipalName
+        - sAMAccountName
       bindDN: CN=ocp_oauth_svc,CN=Users,DC=example,DC=com
       bindPassword:
         name: ldap-secret
@@ -105,23 +105,32 @@ Exemple de ressource LDAPSync:
 ```yaml
 kind: LDAPSyncConfig
 apiVersion: v1
-url: ldap://example.com:389
-bindDN: cn=openshift_svc,cn=users,dc=example,dc=com
+url: ldap://asten.maq:389
+bindDN: cn=compteOpenshift,cn=users,dc=exemple,dc=com
 bindPassword:
-  file: /etc/secret/bind_password
+  file: /etc/secrets/password
 insecure: true
-activeDirectory:
+augmentedActiveDirectory:
     usersQuery:
-        baseDN: "cn=users,dc=example,dc=com"
+        baseDN: "cn=users,dc=exemple,dc=com"
         scope: sub
         derefAliases: never
         filter: (objectclass=person)
         pageSize: 0
-    userNameAttributes: [ userPrincipalName ]
-    groupMembershipAttributes: [ memberOf ]
+    userNameAttributes: [ sAMAccountName ]
+    groupMembershipAttributes: [ "memberOf:1.2.840.113556.1.4.1941:" ]
+    groupsQuery:
+        derefAliases: never
+        pageSize: 0
+    groupNameAttributes: [ cn ]
+    groupUIDAttribute: dn
 ```
+Après avoir créé le fichier yaml, il faut utiliser la commande `oc adm groupes --sync-config=<nom du fichier yaml>.yaml --confirm <le DN du groupe>` pour synchroniser les groupes.
 
-Après avoir créé le fichier yaml, il faut utiliser la commande `oc adm groupes --sync-config=<nom du fichier yaml>.yaml --confirm` pour synchroniser les groupes.
+Exemple de commande:
+```bash
+oc adm groups sync --sync-config=ad_config.yaml --confirm CN=OPENSHIFT_ADMIN,OU=GROUPES,DC=EXEMPLE,DC=COM
+```
 
 NOTE: Pour automatiser la synchronisation, il est possible d'utiliser un `cronjob`.
 
