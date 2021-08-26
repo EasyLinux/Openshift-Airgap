@@ -6,6 +6,10 @@ Tables des matieres
 2. [Centreon Prometheus API](#Centreon-Prometheus-API)
     1. [Prerquis](#Prerequis)
     2. [Installation](#Installation)
+3. [Annexes](#Annexes)
+    1. [PromQL](#PromQL)
+    2. [Centreon CLI](#Centreon-CLI)
+    3. [Recharger Centreon](#Recharger-Centreon)
 
 Il y a plusieurs maniere de surveiller un cluster Openshift, via Prometheus ou l'API de Kubernetes.
 
@@ -132,6 +136,8 @@ centreon -u admin -p Pa55w.rd -o Service -a ADD -v "<Nom de l'hôte>;${service/C
 done
 ```
 
+Une fois les commandes appliqué, exporter la configuration et recharger le Centreon Central. [Documentation ici](#Recharger-Centreon)
+
 NOTE: Certain services peuvent avoir des faux positifs, il faudra reconfigurer les MACCRO `*CRITICAL*`.
 
 Exemple: Pour Pod-Status-API, les MACCROs `CRITICALCONTAINERSTATUS` et `CRITICALPODSTATUS` devra avoir la valeur `%{status} !~ /running/i && %{status} !~ /terminated/i` et  `%{status} !~ /running/i && %{status} !~ /succeeded/i` respectivement.
@@ -241,6 +247,7 @@ Exemple de filtre:
 
 Pour ajouter le service sur l'hôte:
 ```bash
+centreon -u admin -p Pa55w.rd -o Service -a ADD -v "<Nom de l'hôte>;target-status;Cloud-Prometheus-Target-Status-Api-custom"
 ```
 
 **Expressions**
@@ -296,3 +303,29 @@ Exemple de commande de test pour la metrique `aggregator_openapi_v2_regeneration
 --use-new-perfdata
 ```
 
+Pour ajouter le service sur l'hôte:
+```bash
+centreon -u admin -p Pa55w.rd -o Service -a ADD -v "<Nom de l'hôte>;<Description du service>;Cloud-Prometheus-Expression-Api-custom;"
+```
+
+Une fois les commandes appliqué, exporter la configuration et recharger le Centreon Central. [Documentation ici](#Recharger-Centreon)
+
+Annexes
+=======
+
+PromQL
+------
+
+La documentation sur les requêtes PromQL peut etre retrouvé sur le lien suivant: <br/>
+https://prometheus.io/docs/prometheus/latest/querying/basics/
+
+Centreon CLI
+------------
+
+La documentation et l'utilisation de la ligne de commande de centreon peut être retrouvé sur lien suivant: <br />
+https://docs.centreon.com/current/en/api/clapi.html
+
+Recharger Centreon
+------------------
+
+Pour deployer une configuration, les étapes peuvent être retrouvées sur cette [documentation](https://docs.centreon.com/current/en/monitoring/monitoring-servers/deploying-a-configuration.html)
