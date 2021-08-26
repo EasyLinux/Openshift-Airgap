@@ -1,15 +1,8 @@
 Tables des matieres
 ===================
 1. [Centreon Openshift API](#Centreon-Openshift-API)
-    1. [Prerequis](#Prerequis)
-    2. [Installation](#Installation)
 2. [Centreon Prometheus API](#Centreon-Prometheus-API)
-    1. [Prerquis](#Prerequis)
-    2. [Installation](#Installation)
 3. [Annexes](#Annexes)
-    1. [PromQL](#PromQL)
-    2. [Centreon CLI](#Centreon-CLI)
-    3. [Recharger Centreon](#Recharger-Centreon)
 
 Il y a plusieurs maniere de surveiller un cluster Openshift, via Prometheus ou l'API de Kubernetes.
 
