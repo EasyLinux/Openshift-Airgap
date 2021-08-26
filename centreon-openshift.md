@@ -125,7 +125,7 @@ Puis configurer les services a qui permettra de surveiller le cluster via l'API:
 
 ```bash
 for service in `centreon -u admin -p <mot de passe> -o STPL -a show | grep Cloud-Kubernetes | grep -v custom | cut -d ';' -f 2`; do
-centreon -u admin -p Pa55w.rd -o Service -a ADD -v "<Nom de l'hôte>;${service/Cloud-Kubernetes-/};${service}";
+centreon -u admin -p <mot de passe> -o Service -a ADD -v "<Nom de l'hôte>;${service/Cloud-Kubernetes-/};${service}";
 done
 ```
 
@@ -240,7 +240,7 @@ Exemple de filtre:
 
 Pour ajouter le service sur l'hôte:
 ```bash
-centreon -u admin -p Pa55w.rd -o Service -a ADD -v "<Nom de l'hôte>;target-status;Cloud-Prometheus-Target-Status-Api-custom"
+centreon -u admin -p <mot de passe> -o Service -a ADD -v "<Nom de l'hôte>;target-status;Cloud-Prometheus-Target-Status-Api-custom"
 ```
 
 **Expressions**
@@ -298,7 +298,7 @@ Exemple de commande de test pour la metrique `aggregator_openapi_v2_regeneration
 
 Pour ajouter le service sur l'hôte:
 ```bash
-centreon -u admin -p Pa55w.rd -o Service -a ADD -v "<Nom de l'hôte>;<Description du service>;Cloud-Prometheus-Expression-Api-custom;"
+centreon -u admin -p <mot de passe> -o Service -a ADD -v "<Nom de l'hôte>;<Description du service>;Cloud-Prometheus-Expression-Api-custom;"
 ```
 
 Une fois les commandes appliqué, exporter la configuration et recharger le Centreon Central. [Documentation ici](#Recharger-Centreon)
