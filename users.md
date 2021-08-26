@@ -125,7 +125,7 @@ augmentedActiveDirectory:
     groupNameAttributes: [ cn ]
     groupUIDAttribute: dn
 ```
-Après avoir créé le fichier yaml, il faut utiliser la commande `oc adm groupes --sync-config=<nom du fichier yaml>.yaml --confirm <le DN du groupe>` pour synchroniser les groupes.
+Après avoir créé le fichier yaml, il faut utiliser la commande `oc adm groupes --sync-config=<nom du fichier yaml>.yaml --confirm <le DN du groupe>` pour synchroniser le groupe.
 
 Exemple de commande:
 ```bash
